@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
+"""
+This module contains a function that returns the floor of a float.
+"""
 
-import math
-from 2-floor import floor
+def floor(n: float) -> int:
+    """
+    This function takes a float as an argument and returns the floor of the float.
 
-ans = floor(3.14)
+    Parameters:
+    n (float): The float whose floor is to be returned.
 
-print(ans == math.floor(3.14))
-print(floor.__annotations__)
-print("floor(3.14) returns {}, which is a {}".format(ans, type(ans)))
+    Returns:
+    int: The floor of the float.
+    """
+    return int(n)
