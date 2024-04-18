@@ -1,38 +1,27 @@
 #!/usr/bin/env python3
 """
-Adding type annotations to the function 'safely_get_value'.
-
-This script defines a function 'safely_get_value' that retrieves a value
-associated with a key from a dictionary safely. It includes type annotations
-using the 'typing' module to indicate the expected types of the parameters and
-the return value.
+More involved type annotations
 """
-from typing import TypeVar, Mapping, Any, Union, Optional
 
+from typing import Mapping, Any, Union, TypeVar
 
+# Define a type variable for the default value
 T = TypeVar('T')
 
-
-def safely_get_value(
-    dct: Mapping[Any, T],
-    key: Any,
-    default: Optional[T] = None
-) -> Union[T, None]:
+def safely_get_value(dct: Mapping, key: Any, default: T = None) -> Union[Any, T]:
     """
-    Gets the value associated with the key from the dictionary safely,
-    with an optional default value.
+    Safely gets a value from a dictionary based on a key.
 
     Args:
-        dct (Mapping[Any, T]): The dictionary to retrieve the value from.
-        key (Any): The key to look up in the dictionary.
-        default (Optional[T], optional): The default value to return if the key
-            is not present (default is None).
+        dct (Mapping): The input dictionary.
+        key (Any): The key to retrieve the value from the dictionary.
+        default (Optional[T]): The default value to return if the key is not found (default is None).
 
     Returns:
-        Union[T, None]: The value associated with the key if present,
-        otherwise the default value (or None if not specified).
+        Union[Any, T]: The value corresponding to the key in the dictionary, or the default value if the key is not found.
     """
     if key in dct:
         return dct[key]
     else:
         return default
+
