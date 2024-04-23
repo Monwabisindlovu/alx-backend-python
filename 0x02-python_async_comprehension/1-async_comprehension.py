@@ -18,6 +18,7 @@ async def async_generator() -> float:
         await asyncio.sleep(1)
         yield uniform(0, 10)
 
+
 async def async_comprehension() -> List[float]:
     """
     Asynchronous coroutine that collects 10 random numbers using an async comprehension
@@ -26,4 +27,6 @@ async def async_comprehension() -> List[float]:
     Returns:
         List[float]: A list of 10 random numbers between 0 and 10.
     """
-    return [i async for i in async_generator()]
+    return [
+        i async for i in async_generator()
+    ]
