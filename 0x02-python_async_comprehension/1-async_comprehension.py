@@ -7,6 +7,7 @@ import asyncio
 from typing import List
 from random import uniform
 
+
 async def async_generator() -> float:
     """
     Asynchronous coroutine that yields random numbers between 0 and 10.
@@ -27,6 +28,4 @@ async def async_comprehension() -> List[float]:
     Returns:
         List[float]: A list of 10 random numbers between 0 and 10.
     """
-    return [
-        i async for i in async_generator()
-    ]
+    return [i async for i in async_generator()]
