@@ -1,18 +1,39 @@
 #!/usr/bin/env python3
-"""Measure the runtime"""
+"""
+Module for asynchronous comprehension.
+"""
+
 import asyncio
-# from typing import List
-from time import time
-wait_n = __import__('1-concurrent_coroutines').wait_n
+from typing import List
+from random import uniform
 
+# Asynchronous generator that yields random numbers between 0 and 10
+async def async_generator() -> float:
+    for _ in range(10):
+        await asyncio.sleep(1)
+        yield uniform(0, 10)
 
-def measure_time(n: int, max_delay: int) -> float:
-    """Takes in 2 int arguments: 'n' and 'max_delay',
-    calls wait_n 'n' times with the specified 'max_delay',
-    and eventually returns the time it took to complete (float).
-    """
-    start: float = time()
-    asyncio.run(wait_n(n, max_delay))
-    finish: float = time()
-    total_time: float = finish - start
-    return total_time / n
+# Asynchronous comprehension that collects 10 random numbers
+async def async_comprehension() -> List[float]:
+    return [i async for i in async_generator()]
+
+# Coroutine to measure runtime of four parallel comprehensions
+async def measure_runtime() -> float:
+    start_time = asyncio.get_event_loop().time()
+    results = await asyncio.gather(
+        async_comprehension(),
+        async_comprehension(),
+        async_comprehension(),
+        async_comprehension()
+    )
+    end_time = asyncio.get_event_loop().time()
+    return end_time - start_time
+
+# Main function to run the measure_runtime coroutine
+async def main():
+    runtime = await measure_runtime()
+    print(f"Total runtime: {runtime}")
+
+# Run the main function
+if __name__ == "__main__":
+    asyncio.run(main())
