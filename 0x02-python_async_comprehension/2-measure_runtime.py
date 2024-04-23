@@ -24,7 +24,8 @@ async def async_generator() -> float:
 # Asynchronous comprehension that collects 10 random numbers
 async def async_comprehension() -> List[float]:
     """
-    Asynchronous coroutine that collects 10 random numbers using an async comprehension
+    Asynchronous coroutine that collects 10 random numbers using an async
+    comprehension
     over async_generator, then returns the 10 random numbers.
 
     Returns:
@@ -36,7 +37,8 @@ async def async_comprehension() -> List[float]:
 # Coroutine to measure runtime of four parallel comprehensions
 async def measure_runtime() -> float:
     """
-    Coroutine to measure the total runtime of four parallel asynchronous comprehensions.
+    Coroutine to measure the total runtime of four parallel asynchronous
+    comprehensions.
 
     Returns:
         float: Total runtime.
@@ -55,7 +57,8 @@ async def measure_runtime() -> float:
 # Main function to run the measure_runtime coroutine
 async def main():
     """
-    Main function to run the measure_runtime coroutine and print the total runtime.
+    Main function to run the measure_runtime coroutine and print the
+    total runtime.
     """
     runtime = await measure_runtime()
     print(f"Total runtime: {runtime}")
