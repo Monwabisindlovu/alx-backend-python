@@ -1,58 +1,97 @@
 #!/usr/bin/env python3
 
 """
-Test module for utils.memoize decorator.
+Tests for utils.py
 """
 
 import unittest
-from unittest.mock import patch, Mock
-from utils import memoize, access_nested_map
+from parameterized import parameterized
+from unittest.mock import patch
+from utils import access_nested_map, get_json, memoize
+
+
+class TestAccessNestedMap(unittest.TestCase):
+    """
+    TestAccessNestedMap class to test access_nested_map function
+    """
+
+    @parameterized.expand([
+        ({"a": 1}, ("a",), 1),
+        ({"a": {"b": 2}}, ("a",), {"b": 2}),
+        ({"a": {"b": 2}}, ("a", "b"), 2)
+    ])
+    def test_access_nested_map(self, nested_map, path, expected):
+        """
+        Test access_nested_map function
+        """
+        self.assertEqual(access_nested_map(nested_map, path), expected)
+
+    @parameterized.expand([
+        ({}, ("a",), "a"),
+        ({"a": 1}, ("a", "b"), "b")
+    ])
+    def test_access_nested_map_exception(self, nested_map, path, message):
+        """
+        Test access_nested_map function raises KeyError
+        """
+        with self.assertRaises(KeyError) as cm:
+            access_nested_map(nested_map, path)
+        self.assertEqual(str(cm.exception), message)
+
+
+class TestGetJson(unittest.TestCase):
+    """
+    TestGetJson class to test get_json function
+    """
+
+    @parameterized.expand([
+        ("http://example.com", {"payload": True}),
+        ("http://holberton.io", {"payload": False})
+    ])
+    @patch('utils.requests.get')
+    def test_get_json(self, test_url, test_payload, mock_get):
+        """
+        Test get_json function
+        """
+        mock_get.return_value.json.return_value = test_payload
+        self.assertEqual(get_json(test_url), test_payload)
+        mock_get.assert_called_once_with(test_url)
 
 
 class TestMemoize(unittest.TestCase):
     """
-    Test class for the memoize decorator.
+    TestMemoize class to test memoize decorator
     """
 
     class TestClass:
         """
-        Test class with a_method and a_property decorated with memoize.
+        TestClass for memoization
         """
 
         def a_method(self):
             """
-            Method to be memoized.
+            Sample method
             """
             return 42
 
         @memoize
         def a_property(self):
             """
-            Property decorated with memoize, using a_method.
+            Sample property with memoization
             """
             return self.a_method()
 
-    def test_memoize(self):
+    @patch.object(TestClass, 'a_method')
+    def test_memoize(self, mock_a_method):
         """
-        Test method for the memoize decorator.
-        Verifies that a_method is only called once when calling a_property
-        twice.
+        Test memoize decorator
         """
-        test_instance = self.TestClass()
-
-        # Mock a_method
-        with patch.object(test_instance, 'a_method') as mock_a_method:
-            # Call a_property twice
-            result_1 = test_instance.a_property()
-            result_2 = test_instance.a_property()
-
-            # Check that a_method is only called once
-            mock_a_method.assert_called_once()
-
-            # Check that the results are correct
-            self.assertEqual(result_1, 42)
-            self.assertEqual(result_2, 42)
+        mock_a_method.return_value = 42
+        obj = self.TestClass()
+        self.assertEqual(obj.a_property, 42)
+        self.assertEqual(obj.a_property, 42)
+        mock_a_method.assert_called_once()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
